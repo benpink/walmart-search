@@ -1,5 +1,7 @@
 var walmartApp = angular.module('walmartApp', ['ngRoute', 'ngSanitize'])
     .run(function() {
+        // Mitigates the 300ms tap-delay on certain mobile devices
+        // https://github.com/ftlabs/fastclick
         FastClick.attach(document.body);
     });
 
@@ -25,6 +27,7 @@ walmartApp.controller('siteController', function($scope) {
     // Using this as a store for some state
     // There's probably a better way to do this
     $scope.siteObj = {};
+    $scope.siteObj.apipKey = 'a25dnewg5yrpqpzuvhq3jk97';
 });
 
 
@@ -53,14 +56,13 @@ walmartApp.controller('searchController', function($scope, $http) {
             return false;
         }
 
-        var url = 'http://api.walmartlabs.com/v1/search?query=' + $scope.searchTerm + '&format=json&apiKey=a25dnewg5yrpqpzuvhq3jk97&numItems=20&sort=bestseller&callback=JSON_CALLBACK';
+        var url = 'http://api.walmartlabs.com/v1/search?query=' + $scope.searchTerm + '&format=json&apiKey=' + $scope.siteObj.apipKey + '&numItems=20&sort=bestseller&callback=JSON_CALLBACK';
 
         $http.jsonp(url)
         .success(function(response) {
             $scope.searching            = false;
             $scope.searchedTerm         = $scope.searchTerm;
             $scope.results              = response;
-            $scope.noResults            = response.totalResults == 0;
             $scope.siteObj.results      = response;
             $scope.siteObj.searchTerm   = $scope.searchTerm;
             $scope.siteObj.searchedTerm = $scope.searchedTerm;
@@ -69,14 +71,14 @@ walmartApp.controller('searchController', function($scope, $http) {
 });
 
 
-walmartApp.controller('itemController', function($scope, $http, $routeParams) {
-    if ($scope.siteObj.item && $scope.siteObj.item.itemId == $routeParams.itemId) {
-        // Grab the item from cache if it's there
-        $scope.item = $scope.siteObj.item;
+walmartApp.controller('itemController', function($scope, $http, $routeParams, $filter) {
+    if ($scope.siteObj.results) {
+        // If we have stored results, see if we can grab the item from the cache
+        $scope.item = $filter('filter')($scope.siteObj.results.items, {itemId: $routeParams.itemId})[0];
     } else {
-        // Otherwise go grab it from the api
+        // Otherwise go grab it fresh from the api
         $scope.fetching = true;
-        var url = 'http://api.walmartlabs.com/v1/items/' + $routeParams.itemId + '?format=json&apiKey=a25dnewg5yrpqpzuvhq3jk97&callback=JSON_CALLBACK';
+        var url = 'http://api.walmartlabs.com/v1/items/' + $routeParams.itemId + '?format=json&apiKey=' + $scope.siteObj.apipKey + '&callback=JSON_CALLBACK';
 
         $http.jsonp(url)
         .success(function(response) {
@@ -85,18 +87,19 @@ walmartApp.controller('itemController', function($scope, $http, $routeParams) {
             $scope.siteObj.item = response;
         });
     }
+    // Ensure scroll window to top
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
 });
 
 
 walmartApp.controller('reviewsController', function($scope, $http, $routeParams, $filter) {
     $scope.fetching = true;
-    var url = 'http://api.walmartlabs.com/v1/reviews/' + $routeParams.itemId + '?format=json&apiKey=a25dnewg5yrpqpzuvhq3jk97&callback=JSON_CALLBACK';
+    var url = 'http://api.walmartlabs.com/v1/reviews/' + $routeParams.itemId + '?format=json&apiKey=' + $scope.siteObj.apipKey + '&callback=JSON_CALLBACK';
 
     $http.jsonp(url)
     .success(function(response) {
         $scope.fetching = false;
         $scope.reviews = response;
-        console.log(response);
     });
 });
 

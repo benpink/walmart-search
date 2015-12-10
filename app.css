@@ -133,6 +133,16 @@ header h1 a {
         -ms-transform: scale(1.1);
             transform: scale(1.1);
 }
+/*  Prevent scaling on smaller viewports.
+    Not-ideal way of preventing scale on mobile devices.
+    Better way would be to add/remove a body class depending on touch */
+@media screen and (max-width: 600px) {
+    .search-panel ol li a:hover {
+        -webkit-transform: none;
+            -ms-transform: none;
+                transform: none;
+    }
+}
 .search-panel ol li p {
     padding-left: 120px;
     margin-top: 0;

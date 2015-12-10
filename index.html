@@ -68,7 +68,7 @@
             <div class="item-detail">
                 <h3 ng-if="fetching">Loading item...</h3>
                 <div ng-if="item">
-                    <img ng-src="{{ item.mediumImage }}" class="thumb"/>
+                    <img ng-src="{{ item.thumbnailImage }}" class="thumb"/>
                     <p><strong>{{ item.name }}</strong><br>
                     ${{ item.salePrice }}</p>
                     <p ng-show="item.numReviews > 0"><a ng-href="#/item/{{ item.itemId }}/reviews"><img ng-src="{{ item.customerRatingImage }}"/> <small>{{ item.numReviews }} reviews</small></a></p>
