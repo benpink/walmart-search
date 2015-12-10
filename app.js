@@ -1,4 +1,7 @@
-var walmartApp = angular.module('walmartApp', ['ngRoute', 'ngSanitize']);
+var walmartApp = angular.module('walmartApp', ['ngRoute', 'ngSanitize'])
+    .run(function() {
+        FastClick.attach(document.body);
+    });
 
 
 walmartApp.config(function($routeProvider) {
