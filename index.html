@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+    <html ng-app="walmartApp">
+    <head>
+        <title>Walmart-Search</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" />
+        <link rel="stylesheet" href="app.css" />
+
+    </head>
+    <body ng-controller="siteController">
+        <header>
+            <h1><a ng-href="#/">Walmart-Search</a></h1>
+        </header>
+        <div class="page-wrap">
+            <div ng-view></div>
+        </div>
+        <footer>
+            &copy; 2015 Walmart-Search
+        </footer>
+
+
+        <!-- Templates are inlined here to prevent cors issue when running this file without a server -->
+
+        <!-- Search page -->
+        <script type="text/ng-template" id="search.html">
+            <div ng-controller="searchController" class="search-panel">
+                <form ng-submit="searchItems()" class="search-form" name="searchform">
+                    <input type="text" name="searchinput" ng-model="searchTerm" placeholder="Enter a product name" ng-pattern="/^[a-zA-Z0-9\s]*$/" autofocus required/>
+                </form>
+
+                <p ng-show="searchform.searchinput.$error.pattern">
+                    <strong>Uh-oh...</strong> Invalid character detected
+                </p>
+
+                <p ng-if="searchTermShort">
+                    <strong>C'mon now...</strong> You'll need to enter more than that!
+                </p>
+
+                <p ng-if="searching">
+                    <strong>Searching...</strong>
+                </p>
+
+                <p ng-if="results.totalResults == 0 && !searching">
+                    <strong>No results found</strong> :(
+                </p>
+
+                <div ng-if="results.totalResults > 0 && !searching">
+                    <p>
+                        <strong>Top results for "{{ searchedTerm }}"</strong><br>
+                        <small>({{ results.totalResults }} total results)</small>
+                    </p>
+
+                    <ol class="results">
+                        <li ng-repeat="item in results.items">
+                            <a ng-href="#item/{{ item.itemId }}" class="clearfix">
+                                <img ng-src="{{ item.thumbnailImage }}" class="thumb"/>
+                                <p><strong>{{ item.name }}</strong><br>
+                                ${{ item.salePrice }}<br>
+                                <img ng-src="{{ item.customerRatingImage }}"/></p>
+                            </a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </script>
+
+        <!-- Item page -->
+        <script type="text/ng-template" id="item.html">
+            <div class="item-detail">
+                <h3 ng-if="fetching">Loading item...</h3>
+                <div ng-if="item">
+                    <img ng-src="{{ item.mediumImage }}" class="thumb"/>
+                    <p><strong>{{ item.name }}</strong><br>
+                    ${{ item.salePrice }}</p>
+                    <p><a ng-href="#/item/{{ item.itemId }}/reviews"><img ng-src="{{ item.customerRatingImage }}"/> <small>{{ item.numReviews }} reviews</small></a></p>
+                    <p class="item-description" ng-bind-html="item.shortDescription || item.longDescription | trusted"></p>
+                    <p><a ng-href="{{ item.productUrl }}"><small>View on Walmart.com</small></a></p>
+                    <p class="back"><a ng-href="#/" class="btn">&laquo; Back to search</a></p>
+                </div>
+            </div>
+        </script>
+
+        <!-- Reviews page -->
+        <script type="text/ng-template" id="reviews.html">
+            <div class="reviews">
+                <h3 ng-if="fetching">Loading reviews...</h3>
+                <div ng-if="reviews">
+                    <h3>Top reviews for: {{ reviews.name }}</h3>
+                    <ul class="results">
+                        <li ng-repeat="review in reviews.reviews">
+                            <p><strong>{{ review.reviewer }}</strong> - {{ review.title }} <small>({{ review.overallRating.rating }}/5)</small></p>
+                            <p>{{ review.reviewText }}</p>
+                        </li>
+                    </ul>
+                    <p class="center-align"><a ng-href="#/item/{{ reviews.itemId }}" class="btn btn-small">Back to item</a></p>
+                </div>
+            </div>
+        </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-route.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-sanitize.min.js"></script>
+        <script src="app.js"></script>
+    </body>
+</html>
