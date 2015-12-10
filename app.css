@@ -150,6 +150,9 @@ header h1 a {
 .item-detail {
     text-align: center;
 }
+.item-detail h3 {
+    margin-top: 0;
+}
 .item-detail .item-description {
     text-align: left;
     font-size: 0.8em;
@@ -166,6 +169,7 @@ header h1 a {
 -------------------------------------------------- */
 .reviews h3 {
     text-align: center;
+    margin-top: 0;
 }
 .reviews ul {
     margin: 0 0 5em;
