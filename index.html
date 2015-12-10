@@ -24,7 +24,7 @@
         <script type="text/ng-template" id="search.html">
             <div ng-controller="searchController" class="search-panel">
                 <form ng-submit="searchItems()" class="search-form" name="searchform">
-                    <input type="text" name="searchinput" ng-model="searchTerm" placeholder="Enter a product name" ng-pattern="/^[a-zA-Z0-9\s]*$/" autofocus required/>
+                    <input type="text" name="searchinput" ng-model="searchTerm" placeholder="Search products" ng-pattern="/^[a-zA-Z0-9\s]*$/" autofocus required/>
                 </form>
 
                 <p ng-show="searchform.searchinput.$error.pattern">
@@ -71,7 +71,7 @@
                     <img ng-src="{{ item.mediumImage }}" class="thumb"/>
                     <p><strong>{{ item.name }}</strong><br>
                     ${{ item.salePrice }}</p>
-                    <p><a ng-href="#/item/{{ item.itemId }}/reviews"><img ng-src="{{ item.customerRatingImage }}"/> <small>{{ item.numReviews }} reviews</small></a></p>
+                    <p ng-show="item.numReviews > 0"><a ng-href="#/item/{{ item.itemId }}/reviews"><img ng-src="{{ item.customerRatingImage }}"/> <small>{{ item.numReviews }} reviews</small></a></p>
                     <p class="item-description" ng-bind-html="item.shortDescription || item.longDescription | trusted"></p>
                     <p><a ng-href="{{ item.productUrl }}"><small>View on Walmart.com</small></a></p>
                     <p class="back"><a ng-href="#/" class="btn">&laquo; Back to search</a></p>
@@ -91,7 +91,7 @@
                             <p>{{ review.reviewText }}</p>
                         </li>
                     </ul>
-                    <p class="center-align"><a ng-href="#/item/{{ reviews.itemId }}" class="btn btn-small">Back to item</a></p>
+                    <p class="center-align"><a ng-href="#/item/{{ reviews.itemId }}" class="btn btn-small">&laquo; Back to item</a></p>
                 </div>
             </div>
         </script>

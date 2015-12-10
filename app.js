@@ -35,10 +35,13 @@ walmartApp.controller('searchController', function($scope, $http) {
         $scope.searchedTerm = $scope.siteObj.searchedTerm;
     }
 
-    $scope.searchItems = function() {
+    $scope.searchItems = function($event) {
         $scope.searching        = true;
         $scope.searchTermShort  = false;
         $scope.noResults        = false;
+
+        // Drop focus on input to dismiss mobile keypads
+        document.searchform.searchinput.blur();
 
         if ($scope.searchTerm.length < 3) {
             // Search term is too short
