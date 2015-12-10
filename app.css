@@ -135,6 +135,7 @@ header h1 a {
 }
 .search-panel ol li p {
     padding-left: 120px;
+    margin-top: 0;
 }
 .search-panel ol .thumb {
     display: block;
