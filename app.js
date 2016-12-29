@@ -56,7 +56,7 @@ walmartApp.controller('searchController', function($scope, $http) {
             return false;
         }
 
-        var url = 'http://api.walmartlabs.com/v1/search?query=' + $scope.searchTerm + '&format=json&apiKey=' + $scope.siteObj.apipKey + '&numItems=20&sort=bestseller&callback=JSON_CALLBACK';
+        var url = 'https://api.walmartlabs.com/v1/search?query=' + $scope.searchTerm + '&format=json&apiKey=' + $scope.siteObj.apipKey + '&numItems=20&sort=bestseller&callback=JSON_CALLBACK';
 
         $http.jsonp(url)
         .success(function(response) {
@@ -78,7 +78,7 @@ walmartApp.controller('itemController', function($scope, $http, $routeParams, $f
     } else {
         // Otherwise go grab it fresh from the api
         $scope.fetching = true;
-        var url = 'http://api.walmartlabs.com/v1/items/' + $routeParams.itemId + '?format=json&apiKey=' + $scope.siteObj.apipKey + '&callback=JSON_CALLBACK';
+        var url = 'https://api.walmartlabs.com/v1/items/' + $routeParams.itemId + '?format=json&apiKey=' + $scope.siteObj.apipKey + '&callback=JSON_CALLBACK';
 
         $http.jsonp(url)
         .success(function(response) {
@@ -94,7 +94,7 @@ walmartApp.controller('itemController', function($scope, $http, $routeParams, $f
 
 walmartApp.controller('reviewsController', function($scope, $http, $routeParams, $filter) {
     $scope.fetching = true;
-    var url = 'http://api.walmartlabs.com/v1/reviews/' + $routeParams.itemId + '?format=json&apiKey=' + $scope.siteObj.apipKey + '&callback=JSON_CALLBACK';
+    var url = 'https://api.walmartlabs.com/v1/reviews/' + $routeParams.itemId + '?format=json&apiKey=' + $scope.siteObj.apipKey + '&callback=JSON_CALLBACK';
 
     $http.jsonp(url)
     .success(function(response) {
